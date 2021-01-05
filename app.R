@@ -5,4 +5,3 @@ source("ui.R")
 
 options(encoding = "UTF-8")
 shinyApp(ui, server)
-
