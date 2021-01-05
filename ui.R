@@ -1,4 +1,5 @@
 library(shinymaterial)
+library(plotly)
 source("conf/indicators.R")
 
 # define user interface
@@ -17,17 +18,12 @@ ui <- fluidPage(
                                "Réanimation" = "rea",
                                "Rétour à Domicile" = "rad",
                                "Urgences" = "urgs")),
-      checkboxInput("cumulated", "Montrer le cumulé", TRUE)
+      checkboxInput("cumulated", "Montrer le cumulé", FALSE)
     )),
     column(6, wellPanel(
-      selectInput("indicatore", "Indicateur:",
-                  choices = c( "Cas positifssss" = "cp",
-                               "Décés" = "dec",
-                               "Hospitalisations" = "hosp",
-                               "Réanimation" = "rea",
-                               "Rétour à domicile" = "rad",
-                               "Urgences" = "urgs")),
-      checkboxInput("cumulated", "Montrer le cumulé", TRUE)
+      selectInput("geo_segment", "Ragrouper par:", choices = c( "Région" = "region", "Département" = "departement")),
+      br(),
+      br()
     ))
   ),
 
@@ -36,19 +32,21 @@ ui <- fluidPage(
   fluidRow(
     column(6,
            fluidRow(
-            column(6, htmlTemplate("www/components/card.html",
-                                   color = "panel-warning",
-                                   value = "cumulatedCount",
-                                   title = paste("Comptage Cumulé de ", textOutput("selected_indicator_name")))),
+             column(6, wellPanel(
+                selectInput("time_segment", "Ragrouper date par:",
+                             choices = c( "Jour" = "d", "Semaine" = "w", "Mois" = "m", "Quarter" = "q"))
+             )),
 
-            column(6, htmlTemplate("www/components/card.html",
+             column(6, htmlTemplate("www/components/card.html",
                                    color = "panel-danger",
-                                   value = "cumulatedCount",
-                                   title = "Comptage Total")),
-           )),
-
-          fluidRow('totalCount'),
-    column(6, "totalCount")
+                                   value = textOutput("val_total_count_var"),
+                                   title = textOutput("txt_total_count_var"))),
+           ),
+           fluidRow(
+              column(12, plotlyOutput("val_historic_bars"))
+           ),
+    ),
+    column(6, plotlyOutput("map", height = "100%"))
   ),
 
   fluidRow(

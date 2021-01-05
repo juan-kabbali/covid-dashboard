@@ -25,8 +25,9 @@ server <- function(input, output) {
   })
 
   output$val_historic_bars <- renderPlotly({
-    data <- getHistoric(indicators[[input$indicators]][["column"]], indicators[[input$indicators]][["table"]], cumulated())
-    fig <- plot_ly(x = data$date, y = data$indicator_sum, type = "bar", name = "total")
+    data <- getHistoric(indicators[[input$indicators]][["column"]], indicators[[input$indicators]][["table"]],
+                        cumulated = cumulated(), groupBy = input$time_segment)
+    fig <- plot_ly(x = data$date, y = data$indicator_sum, type = "bar", name = "total", showskipes = TRUE, spikemode = "across+toaxis")
 
     if (cumulated()) {
       fig <- add_trace(fig, x = data$date, y = data$cumulative_sum, type = "scatter", mode = "lines+markers", name = "cumulé")
@@ -36,14 +37,25 @@ server <- function(input, output) {
 
   geo_segment <- reactive({ input$geo_segment })
 
+  map_title <- reactive({
+    paste("Total", indicators[[input$indicators]][["name"]], "par", input$geo_segment)
+  })
+
   output$map <- renderPlotly({
+    if ( geo_segment() == "departement") {
+      geojson <- deparments
+    }
+    if ( geo_segment() == "region") {
+      geojson <- regions
+    }
     data <- getIndicatorCountBy(indicators[[input$indicators]][["column"]], indicators[[input$indicators]][["table"]],
-                                "id_location","DEPARTAMENT", "dim_location", "ID_LOCATION")
+                                "id_location", geolocation[[geo_segment()]], geolocation[["table"]],
+                                geolocation[["id"]])
     geo_conf <- list(fitbounds = "locations", visible = FALSE)
     fig <- plot_ly()
-    fig <- fig %>% add_trace( type="choropleth", geojson=deparments, locations=data$segment, z=data$indicator_sum,
+    fig <- fig %>% add_trace( type="choropleth", geojson=geojson, locations=data$segment, z=data$indicator_sum,
                               colorscale="Viridis", featureidkey="properties.nom")
-    fig <- fig %>% layout(geo = geo_conf, title = "Par departement")
+    fig <- fig %>% layout(geo = geo_conf, title = map_title())
     fig
   })
 
