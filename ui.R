@@ -1,12 +1,12 @@
 library(shinymaterial)
 library(plotly)
+
 source("conf/indicators.R")
 
 # define user interface
 ui <- fluidPage(
 
-  # app title
-  titlePanel("COVID-19 EN FRANCE"),
+  htmlTemplate("www/components/header.html"),
 
   # row for inputs
   fluidRow(
