@@ -1,3 +1,4 @@
+# MySQL connection properties
 mysql <- list(
   host = "localhost",
   dbname = "covid",
@@ -5,6 +6,7 @@ mysql <- list(
   password = ""
 )
 
+# geolocation properties
 geolocation <- list(
   deparments = "data/deparments.geojson",
   regions = "data/regions.geojson",
@@ -14,6 +16,7 @@ geolocation <- list(
   id = "ID_LOCATION"
 )
 
+# time dimention properties
 time_segments <- list(
   d = list(
     name = "Jour",

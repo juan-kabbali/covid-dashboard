@@ -4,15 +4,22 @@ library(rjson)
 
 source("conf/global.R")
 
+# geojson data
 deparments <- fromJSON(file = geolocation$deparments)
 regions <- fromJSON(file = geolocation$regions)
 
+# connection instance
 conn <- dbConnect(
     drv = RMySQL::MySQL(),
     dbname = mysql$dbname,
     host = mysql$host,
     username = mysql$username,
     password = mysql$password)
+
+
+##################################################################################################
+######################## generic methods for interacting with MySQL ##############################
+##################################################################################################
 
 getIndicatorCount <- function (column_name, table_name){
   query <- glue::glue("SELECT SUM({column_name}) as indicator_sum FROM {table_name};")
@@ -52,5 +59,3 @@ getHistoric <- function (column_name, table_name, cumulated = TRUE, groupBy = "m
   result <- suppressWarnings(dbGetQuery(conn, query))
   return(result)
 }
-
-#dbDisconnect(conn)

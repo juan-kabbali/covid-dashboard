@@ -1,4 +1,6 @@
 selected_indicator <- NULL
+
+# indicators metadata
 indicators <- list(
   cp = list(
     name = "Cas Positifs",
