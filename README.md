@@ -23,7 +23,8 @@ All that, observed from different analyses axes like **age**, **department**, **
     username = "root"
     password = "shhh!"
     ```
-6. Run the app and lets Analyse
+6. Set up the encoding running ``options(encoding = "UTF-8")`` on your R console 
+7. Run the app and lets Analyse
     ```shell
     # OPTION 1
         # JUST RUN app.R FILE
