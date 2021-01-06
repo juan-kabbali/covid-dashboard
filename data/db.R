@@ -1,10 +1,11 @@
 library(DBI)
 library(RMySQL)
+library(rjson)
 
 source("conf/global.R")
 
-deparments <- rjson::fromJSON(file = geolocation$deparments)
-regions <- rjson::fromJSON(file = geolocation$regions)
+deparments <- fromJSON(file = geolocation$deparments)
+regions <- fromJSON(file = geolocation$regions)
 
 conn <- dbConnect(
     drv = RMySQL::MySQL(),
@@ -15,7 +16,7 @@ conn <- dbConnect(
 
 getIndicatorCount <- function (column_name, table_name){
   query <- glue::glue("SELECT SUM({column_name}) as indicator_sum FROM {table_name};")
-  result <- dbGetQuery(conn, query)
+  result <- suppressWarnings(dbGetQuery(conn, query))
   return(result$indicator_sum)
 }
 
@@ -26,7 +27,7 @@ getIndicatorCountBy <- function (ind_col_name, ind_tbl_name, ind_id, dim_col_nam
     LEFT JOIN {dim_tbl_name} ON {ind_tbl_name}.{ind_id} = {dim_tbl_name}.{dim_id}
     GROUP BY {dim_tbl_name}.{dim_col_name}
   ")
-  result <- dbGetQuery(conn, query)
+  result <- suppressWarnings(dbGetQuery(conn, query))
   return(result)
 }
 
@@ -48,7 +49,7 @@ getHistoric <- function (column_name, table_name, cumulated = TRUE, groupBy = "m
       FROM q
     ")
   }
-  result <- dbGetQuery(conn, query)
+  result <- suppressWarnings(dbGetQuery(conn, query))
   return(result)
 }
 
