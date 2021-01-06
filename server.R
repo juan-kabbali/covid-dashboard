@@ -24,10 +24,14 @@ server <- function(input, output) {
     getIndicatorCount(indicators[[input$indicators]][["column"]], indicators[[input$indicators]][["table"]])
   })
 
+  output$historic_bars_title <- renderText({
+    paste("Total", indicators[[input$indicators]][["name"]], "par", time_segments[[input$time_segment]][["name"]])
+  })
+
   output$val_historic_bars <- renderPlotly({
     data <- getHistoric(indicators[[input$indicators]][["column"]], indicators[[input$indicators]][["table"]],
                         cumulated = cumulated(), groupBy = input$time_segment)
-    fig <- plot_ly(x = data$date, y = data$indicator_sum, type = "bar", name = "total", showskipes = TRUE, spikemode = "across+toaxis")
+    fig <- plot_ly(x = data$date, y = data$indicator_sum, type = "bar", name = "total")
 
     if (cumulated()) {
       fig <- add_trace(fig, x = data$date, y = data$cumulative_sum, type = "scatter", mode = "lines+markers", name = "cumulé")
@@ -37,7 +41,7 @@ server <- function(input, output) {
 
   geo_segment <- reactive({ input$geo_segment })
 
-  map_title <- reactive({
+  output$map_title <- renderText({
     paste("Total", indicators[[input$indicators]][["name"]], "par", input$geo_segment)
   })
 
@@ -55,22 +59,32 @@ server <- function(input, output) {
     fig <- plot_ly()
     fig <- fig %>% add_trace( type="choropleth", geojson=geojson, locations=data$segment, z=data$indicator_sum,
                               colorscale="Viridis", featureidkey="properties.nom")
-    fig <- fig %>% layout(geo = geo_conf, title = map_title())
+    fig <- fig %>% layout(geo = geo_conf)
     fig
   })
 
-  # generate a plot of the requested variable against mpg
-  #output$historicPlot <- renderPlot({
-  #  boxplot(as.formula(formulaText()),
-  #          data = mpgData,
-  #          outline = input$outliers,
-  #          col = "#75AADB", pch = 19)
-  #})
+  output$historic_tests_title <- renderText({
+    paste("Tests positifs vs Nombre de Tests par", time_segments[[input$time_segment]][["name"]])
+  })
 
-  output$historicPlot <- renderText({ "HI" })
+  output$historical_tests <- renderPlotly({
+    table_name <- "fact_test_virology"
+    data_positives <- getHistoric("n_positive_test", table_name, cumulated = FALSE, groupBy = input$time_segment)
+    data_tests <- getHistoric("n_test", table_name, cumulated = FALSE, groupBy = input$time_segment)
 
-  output$totalCount <- renderText({ 58450 })
+    fig <- plot_ly(x = data_positives$date, y = data_tests$indicator_sum, type = "scatter", name = "# tests",
+                   mode = "lines+markers", fill = "tozeroy")
+    fig <- add_trace(fig, x = data_positives$date, y = data_positives$indicator_sum, mode = "lines+markers",
+                     name = "# positifs")
+    return(fig)
+  })
 
-  output$cumulatedCount <- renderText({ "HI" })
+  output$positives_age <- renderPlotly({
+    data <- getIndicatorCountBy("n_positive_test", "fact_test_virology", "id_age",
+                                "AGE_RANGE", "dim_age", "ID_AGE")
 
+    fig <- plot_ly(data, labels = ~segment, values = ~indicator_sum, type = 'pie')
+    fig <- fig %>% layout(xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+                          yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+  })
 }

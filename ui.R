@@ -43,26 +43,24 @@ ui <- fluidPage(
                                    title = textOutput("txt_total_count_var"))),
            ),
            fluidRow(
-              column(12, plotlyOutput("val_historic_bars"))
+              column(12,
+                     h1(textOutput("historic_bars_title"), class = "text-center"),
+                     plotlyOutput("val_historic_bars"))
            ),
     ),
-    column(6, plotlyOutput("map", height = "100%"))
+    column(6,
+           h1(textOutput("map_title"), class = "text-center"),
+           plotlyOutput("map", height = "100%"))
   ),
 
+  hr(),
+
   fluidRow(
-    column(6, 'totalCount'),
-    column(6, "totalCount")
+    column(6,
+           h1(textOutput("historic_tests_title"), class = "text-center"),
+           plotlyOutput("historical_tests")),
+    column(6,
+           h1("Cas Positifs par Tranche d'age", class = "text-center"),
+           plotlyOutput("positives_age"))
   )
-
-
-  #htmlTemplate("www/components/card.html", value = textOutput("cumulatedCount"))
-  #htmlTemplate("www/components/card.html", value = textOutput("totalCount"))
-
-      # output: Formatted text for caption
-      #h3(textOutput("caption")),
-
-      # Output: Plot of the requested variable against mpg
-
-      # Output: Plot of the requested variable against mpg
-      #htmlOutput("cumulatedCount")
 )
