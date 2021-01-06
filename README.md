@@ -16,7 +16,7 @@ All that, observed from different analyses axes like **age**, **department**, **
     install.packages(c("shiny","DBI","RMySQL","plotly","rjson"))
     ```
 4. Import [this](data/MySQL_db_dump.sql) MySQL database
-5. Modify MySQL ENV variables according to your database instance
+5. Modify [MySQL ENV](conf/global.R) variables according to your database instance
     ```r
     host = "localhost"
     dbname = "covid"
