@@ -31,20 +31,7 @@ getIndicatorCountBy <- function (ind_col_name, ind_tbl_name, ind_id, dim_col_nam
 }
 
 getHistoric <- function (column_name, table_name, cumulated = TRUE, groupBy = "m"){
-
-  if (groupBy == "d") {
-    time_expression <- "date(dim_date.DATE_AS_DATE)"
-  }
-  if (groupBy == "w") {
-    time_expression <- "str_to_date(concat(yearweek(dim_date.DATE_AS_DATE), ' Sunday'), '%X%V %W')"
-  }
-  if (groupBy == "m") {
-    time_expression <- "str_to_date(concat(date_format(dim_date.DATE_AS_DATE, '%Y-%m'), '-01'), '%Y-%m-%d')"
-  }
-  if (groupBy == "q") {
-    time_expression <- "str_to_date(concat(year(dim_date.DATE_AS_DATE), '-', ((quarter(dim_date.DATE_AS_DATE) * 3) - 2), '-01'), '%Y-%m-%d')"
-  }
-
+  time_expression <- time_segments[[groupBy]][["group_expression"]]
   query <- glue::glue("
     SELECT {time_expression} AS `date`,
            sum({table_name}.{column_name}) AS `indicator_sum`
