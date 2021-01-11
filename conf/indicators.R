@@ -6,15 +6,15 @@ indicators <- list(
     name = "Cas Positifs",
     key = "cp",
     value = 0,
-    table = "fact_test_virology",
-    column = "n_positive_test"
+    table = "fact_test",
+    column = "positive_tests"
   ),
 
   dec = list(
     name = "Décés",
     key = "dec",
     value = 0,
-    table = "fact_new_hosp",
+    table = "fact_new_hospital",
     column = "incid_dc"
   ),
 
@@ -22,7 +22,7 @@ indicators <- list(
     name = "Hospitalisations",
     key = "hosp",
     value = 0,
-    table = "fact_new_hosp",
+    table = "fact_new_hospital",
     column = "incid_hosp"
   ),
 
@@ -30,7 +30,7 @@ indicators <- list(
     name = "Réanimation",
     key = "rea",
     value = 0,
-    table = "fact_new_hosp",
+    table = "fact_new_hospital",
     column = "incid_rea"
   ),
 
@@ -38,7 +38,7 @@ indicators <- list(
     name = "Rétour à Domicile",
     key = "rad",
     value = 0,
-    table = "fact_new_hosp",
+    table = "fact_new_hospital",
     column = "incid_rad"
   ),
 
@@ -46,7 +46,7 @@ indicators <- list(
     name = "Urgences",
     key = "urgs",
     value = 0,
-    table = "fact_hosp",
-    column = "nbre_pass_corona"
+    table = "fact_emergencies",
+    column = "emergencies"
   )
 )

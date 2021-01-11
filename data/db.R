@@ -44,7 +44,7 @@ getHistoric <- function (column_name, table_name, cumulated = TRUE, groupBy = "m
     SELECT {time_expression} AS `date`,
            sum({table_name}.{column_name}) AS `indicator_sum`
     FROM {table_name}
-    LEFT JOIN dim_date ON {table_name}.id_date = dim_date.ID_DATE
+    LEFT JOIN dim_date ON {table_name}.id_date = dim_date.id
     GROUP BY {time_expression}")
 
   if (cumulated){
