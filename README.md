@@ -33,3 +33,5 @@ All that, observed from different analyses axes like **age**, **department**, **
         # EXECUTE
         R -e "shiny::runApp('covid-dashboard')"
     ````
+
+You can check all those steps in the following [video tutorial](https://www.youtube.com/watch?v=GVx7z2S04QI&feature=youtu.be) 
