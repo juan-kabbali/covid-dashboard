@@ -1,4 +1,3 @@
-library(shinymaterial)
 library(plotly)
 
 source("conf/indicators.R")
@@ -38,7 +37,7 @@ ui <- fluidPage(
              column(6, wellPanel(
                 # date dimention selectable
                 selectInput("time_segment", "Ragrouper date par:",
-                             choices = c( "Jour" = "d", "Semaine" = "w", "Mois" = "m", "Quarter" = "q"))
+                             choices = c( "Jour" = "d", "Semaine" = "w", "Mois" = "m", "Trimestre" = "q"))
              )),
 
              # count bootstrap card

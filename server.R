@@ -1,4 +1,3 @@
-library(shinymaterial)
 library(plotly)
 
 source("data/db.R")
@@ -81,9 +80,9 @@ server <- function(input, output) {
 
   # tested vs positive plot
   output$historical_tests <- renderPlotly({
-    table_name <- "fact_test_virology"
-    data_positives <- getHistoric("n_positive_test", table_name, cumulated = FALSE, groupBy = input$time_segment)
-    data_tests <- getHistoric("n_test", table_name, cumulated = FALSE, groupBy = input$time_segment)
+    table_name <- "fact_test"
+    data_positives <- getHistoric("positive_tests", table_name, cumulated = FALSE, groupBy = input$time_segment)
+    data_tests <- getHistoric("tests", table_name, cumulated = FALSE, groupBy = input$time_segment)
 
     fig <- plot_ly(x = data_positives$date, y = data_tests$indicator_sum, type = "scatter", name = "# tests",
                    mode = "lines+markers", fill = "tozeroy")
@@ -94,8 +93,8 @@ server <- function(input, output) {
 
   # positives by age pie plot
   output$positives_age <- renderPlotly({
-    data <- getIndicatorCountBy("n_positive_test", "fact_test_virology", "id_age",
-                                "AGE_RANGE", "dim_age", "ID_AGE")
+    data <- getIndicatorCountBy("positive_tests", "fact_test", "id_age",
+                                "age", "dim_age", "id")
 
     fig <- plot_ly(data, labels = ~segment, values = ~indicator_sum, type = 'pie')
     fig <- fig %>% layout(xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
